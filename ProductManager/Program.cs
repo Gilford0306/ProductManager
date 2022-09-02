@@ -13,21 +13,21 @@ do
     ModelSeting defaultconnect = JsonSerializer.Deserialize<ModelSeting>(File.ReadAllText(@"D:\Projects\ProductManager\ProductManager\Connection_String\setting.json"));
     string mybase = defaultconnect.Database.ToString();
     Console.WriteLine("\tProducts");
-    Console.WriteLine("All Supplires - press 1");
-    Console.WriteLine("Add Supplires  - press 2");
-    Console.WriteLine("Edit Supplires  - press 3");
-    Console.WriteLine("Deleted Supplires  - press 4");
+    Console.WriteLine("All Category - press 1");
+    Console.WriteLine("Add Category  - press 2");
+    Console.WriteLine("Edit Category  - press 3");
+    Console.WriteLine("Deleted Category  - press 4");
     int k = int.Parse(Console.ReadLine());
     switch (k)
     {
         case 1:
             connect.Open();
             LogerCreate.Log($"Open datbase - {mybase}", LogLevel.Information);
-            var supl = connect.Query<Supplier>("SELECT * FROM [Supplier];");
-            supl.ToList().ForEach(Console.WriteLine);
-            if (supl.Count() == 0)
+            var catr = connect.Query<Category>("SELECT * FROM [Category];");
+            catr.ToList().ForEach(Console.WriteLine);
+            if (catr.Count() == 0)
                 Console.WriteLine("No Supplires yet");
-            LogerCreate.Log($"Get Supplir {supl.Count()} from database - {mybase} ", LogLevel.Information);
+            LogerCreate.Log($"Get Supplir {catr.Count()} from database - {mybase} ", LogLevel.Information);
             connect.Close();
             LogerCreate.Log($"Close datbase {mybase}", LogLevel.Information);
 
@@ -37,11 +37,11 @@ do
             string name = Console.ReadLine();
             connect.Open();
             LogerCreate.Log($"Open datbase {mybase}", LogLevel.Information);
-            Supplier supplier = new Supplier (-1, name);
-            int rows = connect.Execute($"INSERT INTO [dbo].[Supplier]([NameSupplier])VALUES (\'{supplier.NameSupplier}\');");
+            Category category = new Category (-1, name);
+            int rows = connect.Execute($"INSERT INTO [dbo].[Category]([NameCategory])VALUES (\'{category.NameCategory}\');");
             if (rows > 0)
             {
-                Console.WriteLine($" Supplier added!");
+                Console.WriteLine($" Category added!");
                 LogerCreate.Log($"INSERT {name} to datbase {mybase}", LogLevel.Information);
             }
             connect.Close();
@@ -50,17 +50,17 @@ do
         case 3:
             connect.Open();
             LogerCreate.Log($"Open datbase", LogLevel.Information);
-            var items = connect.Query<Supplier>("SELECT * FROM [Supplier];");
+            var items = connect.Query<Category>("SELECT * FROM [Category];");
             items.ToList().ForEach(Console.WriteLine);
             Console.WriteLine("Input Id - ");
             int id = int.Parse(Console.ReadLine());
             Console.WriteLine("Input name - ");
             name = Console.ReadLine();
-            rows = connect.Execute($"UPDATE Supplier SET [NameSupplier]='{name}'WHERE id ={id}");
+            rows = connect.Execute($"UPDATE category SET [NameCategory]='{name}'WHERE id ={id}");
             if (rows > 0)
             {
                 Console.WriteLine("Edited");
-                LogerCreate.Log($"UPDATE Supplier id = {id} in database - {mybase}", LogLevel.Information);
+                LogerCreate.Log($"UPDATE category id = {id} in database - {mybase}", LogLevel.Information);
             }
             else
             {
@@ -73,15 +73,15 @@ do
         case 4:
             connect.Open();
             LogerCreate.Log($"Open datbase - {mybase}", LogLevel.Information);
-            items = connect.Query<Supplier>("SELECT * FROM [Supplier];");
+            items = connect.Query<Category>("SELECT * FROM [category];");
             items.ToList().ForEach(Console.WriteLine);
             Console.WriteLine("Input Id - ");
             id = int.Parse(Console.ReadLine());
-            rows = connect.Execute($"DELETE FROM [dbo].[Supplier] WHERE Id = {id}");
+            rows = connect.Execute($"DELETE FROM [dbo].[Category] WHERE Id = {id}");
             if (rows > 0)
             {
                 Console.WriteLine("Row is deleted");
-                LogerCreate.Log($"Supplier id {id} deleted in database - {mybase}", LogLevel.Information);
+                LogerCreate.Log($"category id {id} deleted in database - {mybase}", LogLevel.Information);
             }
             else
             {
